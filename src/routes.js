@@ -26,14 +26,6 @@ export default function Router() {
             ]
         },
         {
-            path: '/item',
-            element: <MainLayout />,
-            children: [
-                { path: ':contract/:tokenID', element: <HouseDetails /> },
-            ]
-        },
-       
-        {
             path: '/',
             element: <FullLayout />,
             children: [
@@ -42,6 +34,6 @@ export default function Router() {
                 { path: '*', element: <Navigate to='/404' /> }
             ]
         },
-        // { path: '*', element: <Navigate to='/404' replace /> }
+        { path: '*', element: <Navigate to='/404' replace /> }
     ])
 }
