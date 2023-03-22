@@ -31,9 +31,9 @@ export default function Router() {
             children: [
                 { path: '/', element: <Navigate to='/house/requests' /> },
                 { path: '404', element: <NotFound /> },
-                { path: '*', element: <Navigate to='/404' /> }
+                // { path: '*', element: <Navigate to='/404' /> }
             ]
         },
-        { path: '*', element: <Navigate to='/404' replace /> }
+        // { path: '*', element: <Navigate to='/404' replace /> }
     ])
 }
