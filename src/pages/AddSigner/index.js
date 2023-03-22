@@ -15,7 +15,9 @@ export default function AddSigner() {
     const [searchAddress, setSearchAddress] = useState('')
     // const [contractAddress, setContractAddress] = useState('');
     const [creationAmount, setCreationAmount] = useState(0);
+    const [redemptionAmount, setRedemptionAmount] = useState(0);
     const [creationAddress, setCreationAddress] = useState('');
+    const [redemptionAddress, setRedemptionAddress] = useState('');
     const [loading, setLoading] = useState(false);
     const { account } = useWeb3React()
     const classes = useHouseMintStyle();
@@ -79,6 +81,23 @@ export default function AddSigner() {
 
     const handleCerationBasket = () => {
         walletContract.methods.createCreationBasketRequest(GoldContractAddress, web3.utils.toWei(creationAmount, 'ether'), creationAddress, 'token').send({
+            from: account
+        }).then((data)=> {
+            setLoading(false)
+            console.log('result', data)
+            if (data.status){
+                navigate("/")
+            }
+        })
+        .catch(err=> {
+            setLoading(false);
+            console.log("err", err)
+            houseError(err)
+        })
+    }
+
+    const handleRedemptionBasket = () =>{
+        walletContract.methods.createRedemptionRequest(GoldContractAddress, web3.utils.toWei(creationAmount, 'ether'), creationAddress).send({
             from: account
         }).then((data)=> {
             setLoading(false)
@@ -187,6 +206,46 @@ export default function AddSigner() {
                     variant="contained"
                 >
                         Request Creaion Basket
+                </LoadingButton>
+                </Grid>
+            </Grid>
+            <Box component={'h2'}>Redemption Basket</Box>
+            <Grid container spacing={3}>
+                <Grid item xs={4}>
+                <TextField
+                    className={classes.needField}
+                    variant="filled"
+                    label="Creation Amount"
+                    placeholder='100'
+                    value={redemptionAmount}
+                    multiline
+                    onChange={(e) => {
+                        setRedemptionAmount(e.target.value);
+                    }}
+                />
+                </Grid>
+                <Grid item xs={4}>
+                <TextField
+                    className={classes.needField}
+                    variant="filled"
+                    label="Wallet Address"
+                    placeholder={account}
+                    value={redemptionAddress}
+                    multiline
+                    onChange={(e) => {
+                        setRedemptionAddress(e.target.value);
+                    }}
+                />
+                </Grid>
+                <Grid item xs={4}>
+                <LoadingButton
+                    onClick={handleRedemptionBasket}
+                    endIcon={<AddCircleIcon />}
+                    loading={loading}
+                    loadingPosition="end"
+                    variant="contained"
+                >
+                        Request Redepmtion Basket
                 </LoadingButton>
                 </Grid>
             </Grid>
