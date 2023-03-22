@@ -22,7 +22,7 @@ export default function Router() {
             children: [
                 // { path: 'app', element: <Dashboard /> },
                 { path: 'requests', element: <Requests /> },
-                { path: 'addSIgner', element: <AddSigner/>}
+                { path: 'addSigner', element: <AddSigner/>}
             ]
         },
         {
