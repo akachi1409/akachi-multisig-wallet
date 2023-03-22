@@ -30,12 +30,12 @@ export default function AddSigner() {
             houseSuccess("That address is already signer.")
             return;
         }
-        const balance = await walletContract.methods.getBalanceWho(searchAddress).call();
-        console.log("balance", balance);
-        if (balance <=0){
-            houseError("Target address should deposit some avax in the contract.")
-            return;
-        }
+        // const balance = await walletContract.methods.getBalanceWho(searchAddress).call();
+        // console.log("balance", balance);
+        // if (balance <=0){
+        //     houseError("Target address should deposit some avax in the contract.")
+        //     return;
+        // }
         setLoading(true);
         walletContract.methods.addSigner(searchAddress).send({
             from: account
@@ -97,7 +97,7 @@ export default function AddSigner() {
     }
 
     const handleRedemptionBasket = () =>{
-        walletContract.methods.createRedemptionRequest(GoldContractAddress, web3.utils.toWei(creationAmount, 'ether'), creationAddress).send({
+        walletContract.methods.createRedemptionBasketRequest(GoldContractAddress, web3.utils.toWei(redemptionAmount, 'ether'), redemptionAddress).send({
             from: account
         }).then((data)=> {
             setLoading(false)

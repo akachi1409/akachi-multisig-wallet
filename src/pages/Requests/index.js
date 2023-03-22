@@ -149,7 +149,7 @@ export default function Requests() {
               <StyledTableCell align="right">{RequestType[row.requestType]}</StyledTableCell>
               <StyledTableCell align="right">{row.isExecuted ? "Executed": "Not executed yet"}</StyledTableCell>
               <StyledTableCell align="right">{row.data ? web3.eth.abi.decodeParameter('address', row.data): ""}</StyledTableCell>
-              { isSigner && !row.approved && 
+              { isSigner && !row.approved && !row.isExecuted &&
               (<StyledTableCell align="right">
                 <LoadingButton endIcon={<CheckBoxIcon />} variant="outlined" onClick={()=> approveSign(row.index)} loading={loading} loadingPosition="end">Approve</LoadingButton>
               </StyledTableCell>)}
