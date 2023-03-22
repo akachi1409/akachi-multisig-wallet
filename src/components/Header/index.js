@@ -304,7 +304,7 @@ export default function Header(props) {
             <Divider />
             <List>
               {houseMenu.map((page, index) => {
-                console.log("page", page);
+                // console.log("page", page);
                 if (page.authRequired === true && !account) {
                   return null;
                 }

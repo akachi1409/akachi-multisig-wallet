@@ -20,16 +20,19 @@ import { useWalletContract, useWeb3Content } from "hooks/useContractHelpers"
 
 export default function Requests() {
   const navigate = useNavigate()
-  const nftClasses = useNftStyle()
   const { account } = useWeb3React()
   const [loading, setLoading] = useState(false);
   const [allRequests, setAllRequests] = useState([])
+  const [isSigner, setIsSigner] = useState(false);
   
   const walletContract = useWalletContract();
   const web3 = useWeb3Content();
 
   useEffect(async ()=> {
     if (account){
+      const temp = await walletContract.methods._signers(account).call();
+      console.log("temp", temp);
+      setIsSigner(temp)
       setRequets();
     }
   },[account])
@@ -66,7 +69,6 @@ export default function Requests() {
   ]
 
   const approveSign = async(index) => {
-    const isSigner = await walletContract.methods._signers(account).call();
     if (!isSigner) {
         houseError("Caller is not the signer.")
         return;
@@ -147,14 +149,16 @@ export default function Requests() {
               <StyledTableCell align="right">{RequestType[row.requestType]}</StyledTableCell>
               <StyledTableCell align="right">{row.isExecuted ? "Executed": "Not executed yet"}</StyledTableCell>
               <StyledTableCell align="right">{row.data ? web3.eth.abi.decodeParameter('address', row.data): ""}</StyledTableCell>
-              { !row.approved && 
+              { isSigner && !row.approved && 
               (<StyledTableCell align="right">
                 <LoadingButton endIcon={<CheckBoxIcon />} variant="outlined" onClick={()=> approveSign(row.index)} loading={loading} loadingPosition="end">Approve</LoadingButton>
               </StyledTableCell>)}
-              { row.approved && !row.isExecuted && 
+              {/* { !isSigner && !row.approved && 
+              (<StyledTableCell align="right"></StyledTableCell>)} */}
+              { (!isSigner || row.approved) && !row.isExecuted && 
               (<StyledTableCell align="right">
                 <LoadingButton endIcon={<CheckCircleIcon/>} variant="contained" loading={loading} loadingPosition="end" onClick = {()=> runExecute(row.index)}>Execute</LoadingButton></StyledTableCell>)}
-              { row.isExecuted && (<StyledTableCell align="right"></StyledTableCell>)}
+              { row.isExecuted && (<StyledTableCell align="right">Already Executed</StyledTableCell>)}
             </StyledTableRow>
           ))}
         </TableBody>
