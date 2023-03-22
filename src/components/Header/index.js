@@ -196,10 +196,10 @@ export default function Header(props) {
   };
 
   useEffect(() => {
-    if (pathname != "/house/nfts") {
+    if (pathname != "/house/requests") {
       if (!account && cookies.connected != "true") {
         houseInfo("Please connect your wallet");
-        navigate("../../house/nfts");
+        navigate("../../house/requets");
       }
     }
     if (account) {
