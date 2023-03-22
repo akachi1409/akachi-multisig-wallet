@@ -13,6 +13,7 @@ export const RAINBOW_URL = "https://rainbow.me/api/assets?network=ethereum"
 export const POLLING_INTERVAL = 12000;
 
 export const MultiSigAddress = '0x4867a1884A25647262A634484C564C86592c4E02';
+export const GoldContractAddress = '0x343D55b2797e1fF0463F4aaA6863D69761cbfbf9';
 
 const config = {
     'development': {

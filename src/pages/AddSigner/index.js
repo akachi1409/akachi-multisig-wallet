@@ -4,19 +4,23 @@ import { useNavigate } from 'react-router-dom';
 import { Box, TextField, MenuItem, Grid } from '@mui/material';
 import LoadingButton from "@mui/lab/LoadingButton";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { useWalletContract } from "hooks/useContractHelpers"
+import { useWalletContract, useWeb3Content } from "hooks/useContractHelpers"
 import useNftStyle from 'assets/styles/nftStyle';
 import useHouseMintStyle from "assets/styles/houseMintStyle";
 import { houseInfo, houseError, houseSuccess } from "hooks/useToast";
+import { GoldContractAddress } from 'mainConfig'
 
 export default function AddSigner() {
     const navigate = useNavigate()
     const [searchAddress, setSearchAddress] = useState('')
+    // const [contractAddress, setContractAddress] = useState('');
+    const [creationAmount, setCreationAmount] = useState(0);
+    const [creationAddress, setCreationAddress] = useState('');
     const [loading, setLoading] = useState(false);
     const { account } = useWeb3React()
     const classes = useHouseMintStyle();
     const walletContract = useWalletContract();
-    
+    const web3 = useWeb3Content();
 
     const handleSearchAddress = async () => {
         const isSigner = await walletContract.methods._signers(searchAddress).call();
@@ -72,6 +76,23 @@ export default function AddSigner() {
             houseError(err)
         })
     }
+
+    const handleCerationBasket = () => {
+        walletContract.methods.createCreationBasketRequest(GoldContractAddress, web3.utils.toWei(creationAmount, 'ether'), creationAddress, 'token').send({
+            from: account
+        }).then((data)=> {
+            setLoading(false)
+            console.log('result', data)
+            if (data.status){
+                navigate("/")
+            }
+        })
+        .catch(err=> {
+            setLoading(false);
+            console.log("err", err)
+            houseError(err)
+        })
+    }
     return(
         <Grid>
             <Box component={'h2'}>Add Signer</Box>
@@ -113,6 +134,59 @@ export default function AddSigner() {
                     variant="contained"
                 >
                         Request Increase Signature
+                </LoadingButton>
+                </Grid>
+            </Grid>
+            <Box component={'h2'}>Creation Basket</Box>
+            <Grid container spacing={3}>
+                {/* <Grid item xs={3}>
+                <TextField
+                    className={classes.needField}
+                    variant="filled"
+                    label="Contract Address"
+                    placeholder={account}
+                    value={contractAddress}
+                    multiline
+                    onChange={(e) => {
+                        setContractAddress(e.target.value);
+                    }}
+                />
+                </Grid> */}
+                <Grid item xs={4}>
+                <TextField
+                    className={classes.needField}
+                    variant="filled"
+                    label="Creation Amount"
+                    placeholder='100'
+                    value={creationAmount}
+                    multiline
+                    onChange={(e) => {
+                        setCreationAmount(e.target.value);
+                    }}
+                />
+                </Grid>
+                <Grid item xs={4}>
+                <TextField
+                    className={classes.needField}
+                    variant="filled"
+                    label="Wallet Address"
+                    placeholder={account}
+                    value={creationAddress}
+                    multiline
+                    onChange={(e) => {
+                        setCreationAddress(e.target.value);
+                    }}
+                />
+                </Grid>
+                <Grid item xs={4}>
+                <LoadingButton
+                    onClick={handleCerationBasket}
+                    endIcon={<AddCircleIcon />}
+                    loading={loading}
+                    loadingPosition="end"
+                    variant="contained"
+                >
+                        Request Creaion Basket
                 </LoadingButton>
                 </Grid>
             </Grid>
