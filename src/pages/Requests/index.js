@@ -65,7 +65,8 @@ export default function Requests() {
     "SEND_TRANSACTION",
     "SEND_TOKEN",
     "FREEZE_TRANSACTION",
-    "CREATION_BASKET"
+    "CREATION_BASKET",
+    "REDEMPTION_BASKET"
   ]
 
   const approveSign = async(index) => {
