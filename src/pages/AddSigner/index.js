@@ -123,6 +123,12 @@ export default function AddSigner() {
     }
 
     const handleCerationBasket = () => {
+        if (creationAmount>=1000){
+            if (currentSignatures < 3){
+                houseError("Creation Basket more than 1000 should require more than 3 signers.");
+                return;
+            }
+        }
         walletContract.methods.createCreationBasketRequest(GoldContractAddress, web3.utils.toWei(creationAmount, 'ether'), creationAddress, 'token').send({
             from: account
         }).then((data)=> {
@@ -140,6 +146,12 @@ export default function AddSigner() {
     }
 
     const handleRedemptionBasket = () =>{
+        if (redemptionAmount >= 1000){
+            if (currentSignatures < 3){
+                houseError("Redemption Basket more than 1000 should require more than 3 signers.");
+                return;
+            }
+        }
         walletContract.methods.createRedemptionBasketRequest(GoldContractAddress, web3.utils.toWei(redemptionAmount, 'ether'), redemptionAddress).send({
             from: account
         }).then((data)=> {
