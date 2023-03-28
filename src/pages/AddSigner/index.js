@@ -29,6 +29,7 @@ export default function AddSigner() {
     const [loading, setLoading] = useState(false);
     const [signerList, setSignerList] = useState([])
     const [signerCount, setSignerCount] = useState(0);
+    const [currentSignatures, setCurrentSignatures] = useState(0);
     const { account } = useWeb3React()
     const classes = useHouseMintStyle();
     const walletContract = useWalletContract();
@@ -99,6 +100,8 @@ export default function AddSigner() {
                 tempSigerList.push(item);
             }
             setSignerList(tempSigerList);
+            const tempSig = await walletContract.methods._requiredSignatures().call();
+            setCurrentSignatures(tempSig);
         }
     }, [account])
 
@@ -152,7 +155,7 @@ export default function AddSigner() {
             houseError(err)
         })
     }
-    
+
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
         [`&.${tableCellClasses.head}`]: {
           backgroundColor: theme.palette.common.black,
@@ -175,7 +178,8 @@ export default function AddSigner() {
 
     return(
         <Grid>
-            <Box component={'h2'}>Current Signers</Box>
+            <Box component={'h2'}>Current Required Signature: {currentSignatures}</Box>
+            <Box component={'h2'}>Current Signers: {signerCount} signers</Box>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">
                     <TableHead>
