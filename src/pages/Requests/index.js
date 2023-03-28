@@ -114,9 +114,15 @@ export default function Requests() {
     console.log("length", requestLength)
     for ( var i = 0 ; i< requestLength ; i++ ){
       var request = await walletContract.methods._requests(i).call();
+      var signers = [];
+      for (var j = 0; j < request.currentSignatures; j++){
+        var signer = await walletContract.methods._requestSigners(i, j).call();
+        signers.push(signer);
+      }
       var approved = await walletContract.methods.checkSign(request.idx, account).call();
       request.approved = approved;
       request.index = i;
+      request.signers = signers;
       console.log("request", request);
       temp.push(request);
     }
@@ -136,6 +142,7 @@ export default function Requests() {
             <StyledTableCell align="right">Required Type</StyledTableCell>
             <StyledTableCell align="right">Status</StyledTableCell>
             <StyledTableCell align="right">Data</StyledTableCell>
+            <StyledTableCell align="right">Singers</StyledTableCell>
             <StyledTableCell align="right">Action</StyledTableCell>
           </TableRow>
         </TableHead>
@@ -150,6 +157,7 @@ export default function Requests() {
               <StyledTableCell align="right">{RequestType[row.requestType]}</StyledTableCell>
               <StyledTableCell align="right">{row.isExecuted ? "Executed": "Not executed yet"}</StyledTableCell>
               <StyledTableCell align="right">{row.data ? web3.eth.abi.decodeParameter('address', row.data): ""}</StyledTableCell>
+              <StyledTableCell align="right">{row.signers}</StyledTableCell>
               { isSigner && !row.approved && !row.isExecuted &&
               (<StyledTableCell align="right">
                 <LoadingButton endIcon={<CheckBoxIcon />} variant="outlined" onClick={()=> approveSign(row.index)} loading={loading} loadingPosition="end">Approve</LoadingButton>

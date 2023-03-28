@@ -12,7 +12,7 @@ export const SIMPLEHASH_URL = "https://api-testnets.simplehash.com/api/v0/nfts/o
 export const RAINBOW_URL = "https://rainbow.me/api/assets?network=ethereum"
 export const POLLING_INTERVAL = 12000;
 
-export const MultiSigAddress = '0xf4b477aEED645613820914d7C3bA7dd237Eda85F';
+export const MultiSigAddress = '0x01EC592b14DfDAeBD1C82eCA88590515c5e8B285';
 export const GoldContractAddress = '0x343D55b2797e1fF0463F4aaA6863D69761cbfbf9';
 
 const config = {
